@@ -29,6 +29,7 @@ library(rgdal)
 library(dplyr)
 library(tidyr)
 library(gdistance)
+library(mapcost)
 
 
 #using maptools package with readshapePoints function to load in ODK points shapefile
@@ -40,9 +41,12 @@ pts <- readShapePoints("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Tran
 
 #Load in files of boundaries and add pts to map. This code starts with the entire Ethiopia map and zooms to Keffa. Data is loaded from "BUNA" project
 ```{r}
+#Woredas
 gadm36_ETH_3_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_3_sp.rds")
 
 plot(gadm36_ETH_3_sp)
+
+#Kabelles
 gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
 plot(gadm36_ETH_2_sp)
 
@@ -53,16 +57,19 @@ plot(gadm36_ETH_2_sp)
 
 
 plot(gadm36_ETH_2_sp, col = "lightgrey") # plot the ethiopia districts
-sel_jim <- gadm36_ETH_2_sp$NAME_2 == "Jimma"
 sel_keffa <- gadm36_ETH_2_sp$NAME_2 == "Keffa"
-plot(gadm36_ETH_2_sp[ sel_jim, ], col = "turquoise", add = TRUE)
 plot(gadm36_ETH_2_sp[ sel_keffa, ], col = "red", add = TRUE)
 
 #JUST KEFFA with woreda outlines
 plot(gadm36_ETH_2_sp[ sel_keffa, ], col = "red")
 plot(gadm36_ETH_3_sp, add = TRUE)
 
+#Just DECHA 
+sel_Decha <- gadm36_ETH_3_sp$NAME_3 == "Decha"
+plot(gadm36_ETH_3_sp[ sel_Decha, ], col = "yellow")
+plot(gadm36_ETH_3_sp, add = TRUE)
 
+#ADD ODK points
 plot(pts, add = TRUE)
 
 
@@ -71,7 +78,7 @@ plot(pts, add = TRUE)
 
 
 
-#Generate a plotting function and load in Ethiopian "regional", "woreda, and "Kabelle" shapefiles. The files are loaded with the raster package using the "getdata function.
+#Generate a plotting function and load in Ethiopia DEM from raster getdata function
 ```{r}
 #Plotting function
 plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4), 
@@ -85,19 +92,22 @@ plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4),
 #Pull the data
 dem_ethio <- getData(name = "alt", country = "ETH", path = tempdir())
 plot_noaxes(dem_ethio, main = "Ethiopia DEM", legend.args = list(text = "meters"))
+
 ```
 
 
 
-
-
-
-
-gdistance URL Link:
+"gdistance" package URL Link:
 
 https://cran.r-project.org/web/packages/gdistance/vignettes/gdistance1.pdf
 
+"mapcost" package URL Link:
+
+https://cran.r-project.org/web/packages/movecost/movecost.pdf
+
 ```{r}
+#Need to figure out process and info needed for mapcost. I see to have the required file types.
+
 
 ```
 
