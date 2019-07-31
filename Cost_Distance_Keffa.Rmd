@@ -13,17 +13,89 @@ This is an R Markdown document that functions as a "How to" for Cost Distance An
 -File paths will need to altered to fit the users' set up*
 -Large file data sets such as the "Decha_Transect_points"" should be .gitignored so they do not exist on the github repository as they are large files.
 
--Packages may need to be downloaded prior to running script. (raster, sp, igraph,)
+-Packages may need to be downloaded prior to running script. (raster, sp, igraph,gdistance)
+
+
 
 #Load neccesary packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+#Load Packages
+library(raster)
+library(sf)
+library(maptools)
+library(rgdal)
+library(dplyr)
+library(tidyr)
 library(gdistance)
+
+
+#using maptools package with readshapePoints function to load in ODK points shapefile
+pts <- readShapePoints("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Points/Decha_Transect_Points.shp")
+
 
 ```
 
 
+#Load in files of boundaries and add pts to map. This code starts with the entire Ethiopia map and zooms to Keffa. Data is loaded from "BUNA" project
+```{r}
+gadm36_ETH_3_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_3_sp.rds")
+
+plot(gadm36_ETH_3_sp)
+gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
+plot(gadm36_ETH_2_sp)
+
+
+sel_keffa <- gadm36_ETH_2_sp$NAME_2 == "Keffa"
+plot(sel_keffa)
+plot(gadm36_ETH_2_sp)
+
+
+plot(gadm36_ETH_2_sp, col = "lightgrey") # plot the ethiopia districts
+sel_jim <- gadm36_ETH_2_sp$NAME_2 == "Jimma"
+sel_keffa <- gadm36_ETH_2_sp$NAME_2 == "Keffa"
+plot(gadm36_ETH_2_sp[ sel_jim, ], col = "turquoise", add = TRUE)
+plot(gadm36_ETH_2_sp[ sel_keffa, ], col = "red", add = TRUE)
+
+#JUST KEFFA with woreda outlines
+plot(gadm36_ETH_2_sp[ sel_keffa, ], col = "red")
+plot(gadm36_ETH_3_sp, add = TRUE)
+
+
+plot(pts, add = TRUE)
+
+
+```
+
+
+
+
+#Generate a plotting function and load in Ethiopian "regional", "woreda, and "Kabelle" shapefiles. The files are loaded with the raster package using the "getdata function.
+```{r}
+#Plotting function
+plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4), 
+                        ...) {
+  if(!class(x) %in% c("RasterLayer", "RasterStack", "RasterBrick", "Extent")) {
+    stop("This function is intended for rasters only", call. = FALSE)
+  }
+  par(mar = mar)
+  plot(x, axes = axes, box = axes, ...)
+}
+#Pull the data
+dem_ethio <- getData(name = "alt", country = "ETH", path = tempdir())
+plot_noaxes(dem_ethio, main = "Ethiopia DEM", legend.args = list(text = "meters"))
+```
+
+
+
+
+
+
+
+gdistance URL Link:
+
+https://cran.r-project.org/web/packages/gdistance/vignettes/gdistance1.pdf
 
 ```{r}
 
