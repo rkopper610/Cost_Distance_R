@@ -1,0 +1,99 @@
+---
+title: "pckge_testing"
+author: "Ryan Kopper"
+date: "August 2, 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# To read in data use rgdal::readOGR or sf::st_read
+
+farmers2 <- readOGR("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Points/Decha_Transect_Points.shp")
+
+# or
+
+farmers <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Points/Decha_Transect_Points.shp")
+
+
+
+```
+
+
+
+```{r}
+#Load in the roads shapefile from open street map
+#Attempt to clip to just the extent of Keffa
+
+roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
+
+#Load in districts/Decha
+districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/districts.rds")
+
+plot(districts)
+
+
+#Oganize .shp files
+sfdat <- list("districts" = districts,  "roads" = roads, "farmers" = farmers)
+sapply(sfdat, function(x) st_bbox(x))
+
+#Show that they are in the same CRS (Cordinate reference system )
+st_crs(districts)
+st_crs(roads)
+st_crs(farmers)
+
+par(mar = c(0, 0, 0, 0))
+plot(sfdat$districts %>% st_geometry(), col = "grey")
+plot(sfdat$roads %>% st_geometry(), col = "red", add = TRUE)
+plot(sfdat$farmers %>% st_geometry(), col = "blue", pch = 20, add = TRUE)
+
+#Just DECHA w/ farmers, roads, DEM added in
+par(mar = c(0, 0, 0, 0))
+sel_Decha <- districts$NAME_3 == "Decha"
+plot(districts[ sel_Decha, ], col = "yellow")
+plot(districts, add = TRUE)
+plot(sfdat$roads %>% st_geometry(), col = "red", add = TRUE)
+plot(sfdat$farmers %>% st_geometry(), col = "blue", pch = 20, add = TRUE)
+
+
+
+
+
+```
+
+
+#Add DEMs to map and make sure CRS line up
+```{r}
+
+Keffa_DEM <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif")
+
+library(raster)
+fn <- "C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif"
+r1 <- raster(fn)
+plot(r1)
+
+st_crs(r1) #same crs as other files*
+
+
+#PLOT EACH LAYER
+par(mar = c(0, 0, 0, 0))
+plot(districts[ sel_Decha, ])
+plot(r1, add = TRUE)
+plot(districts[ sel_Decha, ], add = TRUE)
+plot(sfdat$roads %>% st_geometry(), col = "red", add = TRUE)
+plot(sfdat$farmers %>% st_geometry(), col = "blue", pch = 20, add = TRUE)
+
+```
+
+
+#Now attempt to use gdistance
+```{r}
+library(gdistance)
+
+
+
+```
+

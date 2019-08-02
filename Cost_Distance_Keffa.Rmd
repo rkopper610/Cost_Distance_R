@@ -33,7 +33,7 @@ library(mapcost)
 
 
 #using maptools package with readshapePoints function to load in ODK points shapefile
-pts <- readShapePoints("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Points/Decha_Transect_Points.shp")
+pts <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Points/Decha_Transect_Points.shp")
 
 
 ```
@@ -41,12 +41,12 @@ pts <- readShapePoints("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Tran
 
 #Load in files of boundaries and add pts to map. This code starts with the entire Ethiopia map and zooms to Keffa. Data is loaded from "BUNA" project
 ```{r}
-#Woredas
+#Kabeles
 gadm36_ETH_3_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_3_sp.rds")
 
 plot(gadm36_ETH_3_sp)
 
-#Kabelles
+#Woredas
 gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
 plot(gadm36_ETH_2_sp)
 
@@ -70,7 +70,15 @@ plot(gadm36_ETH_3_sp[ sel_Decha, ], col = "yellow")
 plot(gadm36_ETH_3_sp, add = TRUE)
 
 #ADD ODK points
-plot(pts, add = TRUE)
+plot(pts2, color = "black", add = TRUE)
+
+
+#Load in the roads shapefile from open street map
+rds_full <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
+
+#Add in full roads shapefile
+plot(rds_full,add = TRUE)
+
 
 
 ```
