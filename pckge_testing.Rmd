@@ -97,3 +97,15 @@ library(gdistance)
 
 ```
 
+Using the "mapview" package tomake map interactivewith layers
+```{r}
+
+library(mapview)
+mapview(districts[ sel_Decha, ])
+
+
+
+
+```
+
+
