@@ -29,6 +29,15 @@ farmers <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect
 #Attempt to clip to just the extent of Keffa
 
 roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
+#-----------------------------------------------------------------------------
+#chirps1_dist72 <- crop(x = chirpsz[[1]], y = districts %>% slice(72))
+
+
+#kef_rds <- crop(x = roads, y = districts)
+
+#The above uses the extent of sel_keffa  to crop the roads layer-NOT FUNCTIONING
+
+#------------------------------------------------------------------------------
 
 #Load in districts/Decha
 districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/districts.rds")
@@ -69,6 +78,11 @@ plot(sfdat$farmers %>% st_geometry(), col = "blue", pch = 20, add = TRUE)
 ```{r}
 
 Keffa_DEM <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif")
+library(sf)
+
+MA_DEM <- "C:/Users/rkopp/Desktop/R_work/MA_dem/srtm_22_04.tif"
+r3 <- raster(MA_DEM)
+mapview(r3)
 
 library(raster)
 fn <- "C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif"
@@ -102,8 +116,10 @@ Using the "mapview" package tomake map interactivewith layers
 
 library(mapview)
 mapview(districts[ sel_Decha, ])
+mapview(pts, add = TRUE) %>% plot(roads, add = TRUE)
 
 
+library(dplyr)
 
 
 ```

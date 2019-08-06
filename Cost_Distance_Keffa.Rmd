@@ -45,7 +45,7 @@ pts <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect_Poi
 gadm36_ETH_3_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_3_sp.rds")
 
 plot(gadm36_ETH_3_sp)
-
+mapview(pts)
 #Woredas
 gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
 plot(gadm36_ETH_2_sp)
@@ -100,6 +100,7 @@ plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4),
 #Pull the data
 dem_ethio <- getData(name = "alt", country = "ETH", path = tempdir())
 plot_noaxes(dem_ethio, main = "Ethiopia DEM", legend.args = list(text = "meters"))
+
 
 ```
 
