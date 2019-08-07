@@ -76,8 +76,6 @@ speed[adj] <- 6 * exp(-3.5 * abs(slope[adj] + 0.05))
 Conductance <- geoCorrection(speed)
 
 
-
-
 #example points point 1 = A, point 8 = B
 
 A <- c(36.22489, 7.178127)
@@ -92,4 +90,6 @@ lines(AtoB, col="red", lwd=2)
 lines(BtoA, col="blue")
 text(A[1] - 10, A[2] - 10, "A")
 text(B[1] + 10, B[2] + 10, "B")
+plot(Dech_crop, add = TRUE)
+
 

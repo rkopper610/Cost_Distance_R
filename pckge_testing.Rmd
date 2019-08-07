@@ -29,6 +29,17 @@ farmers <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect
 #Attempt to clip to just the extent of Keffa
 
 roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
+
+library(raster)
+
+zamr <- raster(x = extent(districts), crs = crs(districts), res = 0.1)
+values(zamr) <- 1:ncell(zamr)
+
+roadsr <- roads %>% filter(as.numeric(st_length(.)) > 1000000) %>% 
+  mutate(ID = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
+  rasterize(., zamr, field = "ID")
+
+
 #-----------------------------------------------------------------------------
 #chirps1_dist72 <- crop(x = chirpsz[[1]], y = districts %>% slice(72))
 
@@ -40,7 +51,7 @@ roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis
 #------------------------------------------------------------------------------
 
 #Load in districts/Decha
-districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/districts.rds")
+districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
 
 plot(districts)
 

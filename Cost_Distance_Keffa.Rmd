@@ -29,7 +29,7 @@ library(rgdal)
 library(dplyr)
 library(tidyr)
 library(gdistance)
-library(mapcost)
+
 
 
 #using maptools package with readshapePoints function to load in ODK points shapefile
