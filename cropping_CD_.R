@@ -14,7 +14,7 @@ gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.r
 keff_cropped <- crop(x = gadm36_ETH_2_sp ,
                        extent(35.42, 36.80, 6.22, 8.10))
 plot(keff_cropped)
-
+plot(ras, add = TRUE)
 
 r_cropped <- crop(x = r ,
                   extent(35.42, 36.80, 6.22, 8.10))

@@ -40,6 +40,15 @@ roadsr <- roads %>% filter(as.numeric(st_length(.)) > 1000000) %>%
   rasterize(., zamr, field = "ID")
 
 
+#Using openstreetmap package---
+library(OpenStreetMap)
+roadsr <- openmap(roads)
+ras <- raster(roads)
+plotRGB(ras)
+plot(ras)
+
+#st_crs(ras)
+
 #-----------------------------------------------------------------------------
 #chirps1_dist72 <- crop(x = chirpsz[[1]], y = districts %>% slice(72))
 
