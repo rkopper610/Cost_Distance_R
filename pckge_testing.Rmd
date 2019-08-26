@@ -36,8 +36,12 @@ zamr <- raster(x = extent(districts), crs = crs(districts), res = 0.1)
 values(zamr) <- 1:ncell(zamr)
 
 roadsr <- roads %>% filter(as.numeric(st_length(.)) > 1000000) %>% 
-  mutate(ID = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
-  rasterize(., zamr, field = "ID")
+  mutate(osm_id = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
+  rasterize(., zamr, field = "osm_id")
+
+roadsr <- roads %>% mutate(osm_id = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
+  rasterize(., zamr, field = "osm_id")
+
 
 
 #Using openstreetmap package---
@@ -45,9 +49,9 @@ library(OpenStreetMap)
 roadsr <- openmap(roads)
 ras <- raster(roads)
 plotRGB(ras)
-plot(ras)
-
-#st_crs(ras)
+plot(ras) 
+plot(roadsr,add = T)
+st_crs(roadsr)
 
 #-----------------------------------------------------------------------------
 #chirps1_dist72 <- crop(x = chirpsz[[1]], y = districts %>% slice(72))

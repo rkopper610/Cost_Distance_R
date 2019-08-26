@@ -93,3 +93,4 @@ text(B[1] + 10, B[2] + 10, "B")
 plot(Dech_crop, add = TRUE)
 
 
+
