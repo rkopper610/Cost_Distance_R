@@ -41,6 +41,7 @@ r_crop_dech <- crop(x = r ,
 par(mar = c(0, 0, 0, 0))
 plot(r_crop_dech)
 plot(Dech_crop, add = TRUE)
+plot(arc_roads1, add = TRUE)
 
 #Interviews aka "farmers"
 
@@ -50,9 +51,7 @@ plot(farmers, col = "black", add = TRUE)
 
 
 
-#roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
 
-#plot(roads, add = TRUE)
 
 #-----------------------------------------------------------------------------------
 #USING EXAMPLE FROM GDISTANCE VIGNETTE

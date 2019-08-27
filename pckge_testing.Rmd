@@ -7,7 +7,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
+```{r setup, in clude=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 # To read in data use rgdal::readOGR or sf::st_read
@@ -25,43 +25,19 @@ farmers <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect
 
 
 ```{r}
-#Load in the roads shapefile from open street map
-#Attempt to clip to just the extent of Keffa
-
-roads <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/ethiopia-latest-free_OS/gis_osm_roads_free_1.shp")
-
-library(raster)
-
-zamr <- raster(x = extent(districts), crs = crs(districts), res = 0.1)
-values(zamr) <- 1:ncell(zamr)
-
-roadsr <- roads %>% filter(as.numeric(st_length(.)) > 1000000) %>% 
-  mutate(osm_id = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
-  rasterize(., zamr, field = "osm_id")
-
-roadsr <- roads %>% mutate(osm_id = 1:nrow(.)) %>% st_transform(crs = 4326) %>% 
-  rasterize(., zamr, field = "osm_id")
+#Load in the roads file from open street map that was converted to a raster in ARC
 
 
+arc_roads <- "C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/os_roads_contents/OS_Roads_ras1.tif"
+arc_roads1 <- raster(arc_roads)
+plot(arc_roads1)
+plot_noaxes(arc_roads1)
 
-#Using openstreetmap package---
-library(OpenStreetMap)
-roadsr <- openmap(roads)
-ras <- raster(roads)
-plotRGB(ras)
-plot(ras) 
-plot(roadsr,add = T)
-st_crs(roadsr)
+
+#check coordinate reference system (EPSG: 4326)
+st_crs(arc_roads1)
 
 #-----------------------------------------------------------------------------
-#chirps1_dist72 <- crop(x = chirpsz[[1]], y = districts %>% slice(72))
-
-
-#kef_rds <- crop(x = roads, y = districts)
-
-#The above uses the extent of sel_keffa  to crop the roads layer-NOT FUNCTIONING
-
-#------------------------------------------------------------------------------
 
 #Load in districts/Decha
 districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
@@ -69,7 +45,7 @@ districts <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
 plot(districts)
 
 
-#Oganize .shp files
+#Organize .shp files
 sfdat <- list("districts" = districts,  "roads" = roads, "farmers" = farmers)
 sapply(sfdat, function(x) st_bbox(x))
 
@@ -112,6 +88,8 @@ library(raster)
 fn <- "C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif"
 r1 <- raster(fn)
 plot(r1)
+
+
 
 st_crs(r1) #same crs as other files*
 
