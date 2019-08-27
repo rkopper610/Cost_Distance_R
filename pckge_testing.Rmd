@@ -37,6 +37,35 @@ plot_noaxes(arc_roads1)
 #check coordinate reference system (EPSG: 4326)
 st_crs(arc_roads1)
 
+
+#Crop roads raster layer to the extent of Decha (and surrounding woredas  )
+cropped_ar_rds <- crop(x = arc_roads1 ,
+                  extent(35.49, 36.5, 6.22, 7.56))
+plot_noaxes(cropped_ar_rds)
+plot(Dech_crop, add = TRUE)
+
+#------------------------------------------------------------------------------
+
+#Looking to improve the resolution of the roads layer
+res(cropped_ar_rds) # 0.05257174 0.05257174
+
+#------------------------------------------------------------------------------
+# #Use aggregate and a assign a factor to aggregate from
+# 
+# 
+# rds.aggregate <- disaggregate(cropped_ar_rds, fact = 12)
+# res(rds.aggregate)
+# plot(rds.aggregate)
+# #Doesn't improve much
+#-------------------------------------------------------------------------------
+# resampleFactor <- .5  # reduce the cell size by 50% and double the number of rows and columns.      
+#      
+# # inCols <- ncol(cropped_ar_rds)
+# # inRows <- nrow(cropped_ar_rds)
+# # resampledRaster <- raster(ncol=(inCols / resampleFactor), nrow=(inRows / resampleFactor))
+# # extent(resampledRaster) <- extent(cropped_ar_rds)
+# # resampledRaster <- resample(cropped_ar_rds, resampledRaster,datatype="INT1U",method='bilinear',filename="testOutResamp.tif",overwrite=TRUE)
+# # plot(resampledRaster)
 #-----------------------------------------------------------------------------
 
 #Load in districts/Decha
