@@ -25,24 +25,8 @@ farmers <- st_read("C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/Decha_Transect
 
 
 ```{r}
-#Load in the roads file from open street map that was converted to a raster in ARC
 
 
-arc_roads <- "C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/os_roads_contents/OS_Roads_ras1.tif"
-arc_roads1 <- raster(arc_roads)
-plot(arc_roads1)
-plot_noaxes(arc_roads1)
-
-
-#check coordinate reference system (EPSG: 4326)
-st_crs(arc_roads1)
-
-
-#Crop roads raster layer to the extent of Decha (and surrounding woredas  )
-cropped_ar_rds <- crop(x = arc_roads1 ,
-                  extent(35.49, 36.5, 6.22, 7.56))
-plot_noaxes(cropped_ar_rds)
-plot(Dech_crop, add = TRUE)
 
 #------------------------------------------------------------------------------
 
@@ -109,6 +93,7 @@ plot(sfdat$farmers %>% st_geometry(), col = "blue", pch = 20, add = TRUE)
 Keffa_DEM <- st_read("C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif")
 library(sf)
 
+library(mapview)
 MA_DEM <- "C:/Users/rkopp/Desktop/R_work/MA_dem/srtm_22_04.tif"
 r3 <- raster(MA_DEM)
 mapview(r3)
@@ -141,6 +126,62 @@ library(gdistance)
 
 
 ```
+
+#Now using the "movecost"" package
+```{r}
+library(movecost)
+library(gdistance)
+library(raster)
+
+#LOAD in data
+r1 <- "C:/Users/rkopp/Desktop/R_work/Buna/srtm/srtm_44_11.tif"
+r <- raster(r1)
+plot(r)
+plot(gadm36_ETH_2_sp, add = TRUE)
+
+#crop down the DEM raster and border .shpfile
+
+#Woredas
+gadm36_ETH_2_sp <- readRDS("C:/Users/rkopp/Desktop/R_work/Buna/gadm36_ETH_2_sp.rds")
+keff_cropped <- crop(x = gadm36_ETH_2_sp ,
+                       extent(35.42, 36.80, 6.22, 8.10))
+plot(keff_cropped)
+plot(ras, add = TRUE)
+
+r_cropped <- crop(x = r ,
+                  extent(35.42, 36.80, 6.22, 8.10))
+
+
+par(mar = c(0, 0, 0, 0))
+plot(r_cropped)
+plot(keff_cropped, add = TRUE)
+
+#Load in the roads file from open street map that was converted to a raster in ARC
+
+arc_roads <- "C:/Users/rkopp/Desktop/R_work/Cost_Distance_R/os_roads_contents/OS_Roads_ras1.tif"
+arc_roads1 <- raster(arc_roads)
+plot(arc_roads1)
+plot_noaxes(arc_roads1)
+
+
+#check coordinate reference system (EPSG: 4326)
+st_crs(arc_roads1)
+
+
+#Crop roads raster layer to the extent of Decha (and surrounding woredas  )
+cropped_ar_rds <- crop(x = arc_roads1 ,
+                  extent(35.49, 36.5, 6.22, 7.56))
+plot_noaxes(cropped_ar_rds)
+plot(Dech_crop, add = TRUE)
+
+
+CD <- movecost(dtm = r_cropped, destin = cropped_ar_rds  , time = m, origin = cropped_ar_rds, funct = t)
+
+
+```
+
+
+
 
 Using the "mapview" package tomake map interactivewith layers
 ```{r}
